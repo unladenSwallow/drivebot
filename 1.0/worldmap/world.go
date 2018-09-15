@@ -2,6 +2,8 @@ package worldmap
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 )
 
 const (
@@ -10,6 +12,7 @@ const (
 )
 
 func PrintWorld() {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	fmt.Println("Printing The World....")
 	// print the top
 	printBand()
@@ -21,7 +24,11 @@ func PrintWorld() {
 			} else if x == (xsize - 1) {
 				fmt.Println("|")
 			} else {
-				fmt.Print(" ")
+				if r.Int()%12 == 0 {
+					PrintWall()
+				} else {
+					fmt.Print(" ")
+				}
 			}
 		}
 	}
