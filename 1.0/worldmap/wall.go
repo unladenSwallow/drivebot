@@ -1,16 +1,15 @@
 package worldmap
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
 
-func PrintWall() {
+func GetWall() string {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	if r.Int()%2 == 0 {
-		fmt.Print("_")
+	if r.Int()%3 == 0 {
+		return "_"
 	} else {
-		fmt.Print("|")
+		return "|"
 	}
 }

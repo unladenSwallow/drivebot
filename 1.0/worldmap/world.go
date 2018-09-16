@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+
+	"drivebot/1.0/driver"
 )
 
 const (
@@ -11,37 +13,50 @@ const (
 	ysize = 35
 )
 
+var board [][]string
+
 func PrintWorld() {
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	makeBoard()
 	fmt.Println("Printing The World....")
-	// print the top
-	printBand()
+	driverX, driverY := driver.GetCurrentDriverPosition()
+	fmt.Println("", driverX, driverY)
 	// print the middle
-	for y := 1; y < (ysize - 1); y++ {
+	for y := 0; y < ysize; y++ {
 		for x := 0; x < xsize; x++ {
 			if x == 0 {
-				fmt.Print("|")
+				board[y][x] = "|"
+				fmt.Print(board[y][x])
 			} else if x == (xsize - 1) {
-				fmt.Println("|")
+				board[y][x] = "|"
+				fmt.Println(board[y][x])
+			} else if y == 0 || y == ysize-1 {
+				board[y][x] = "-"
+				fmt.Print(board[y][x])
+			} else if y == driverY && x == driverX {
+				board[y][x] = driver.Driver
+				fmt.Print(board[y][x])
 			} else {
-				if r.Int()%12 == 0 {
-					PrintWall()
+				if getRandomIntNow()%6 == 0 {
+					wall := GetWall()
+					board[y][x] = wall
+					fmt.Print(board[y][x])
 				} else {
-					fmt.Print(" ")
+					board[y][x] = " "
+					fmt.Print(board[y][x])
 				}
 			}
 		}
 	}
-	// print the bottom
-	printBand()
 }
 
-func printBand() {
-	for t := 0; t < xsize; t++ {
-		if t == (xsize - 1) {
-			fmt.Println("-")
-		} else {
-			fmt.Print("-")
-		}
+func getRandomIntNow() int {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return r.Int()
+}
+
+func makeBoard() {
+	board = make([][]string, ysize)
+	for i := range board {
+		board[i] = make([]string, xsize)
 	}
 }
